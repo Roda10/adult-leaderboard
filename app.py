@@ -425,7 +425,7 @@ with colR:
     st.header("🏆 Leaderboard")
     
     # Tabs for different views
-    tab1, tab2, tab3 = st.tabs(["📊 Toutes les soumissions", "🥇 Meilleure par équipe", "📈 Statistiques"])
+    tab1, tab2, tab3 = st.tabs(["🥇 Meilleure par équipe", "📊 Toutes les soumissions", "📈 Statistiques"])
     
     conn = get_conn()
     
@@ -443,6 +443,31 @@ with colR:
         )
     
     with tab1:
+        if not lb.empty:
+            # Best submission per team
+            best_per_team = lb.sort_values(['team', 'public_auc'], ascending=[True, False])
+            best_per_team = best_per_team.groupby('team').first().reset_index()
+            
+            # Re-sort by score
+            if reveal_private and 'private_auc' in best_per_team.columns and best_per_team['private_auc'].notna().any():
+                best_per_team = best_per_team.sort_values('private_auc', ascending=False)
+            else:
+                best_per_team = best_per_team.sort_values('public_auc', ascending=False)
+            
+            best_per_team['rank'] = range(1, len(best_per_team) + 1)
+            best_per_team['timestamp'] = pd.to_datetime(best_per_team['timestamp']).dt.strftime('%Y-%m-%d %H:%M')
+            
+            if not reveal_private and 'private_auc' in best_per_team.columns:
+                best_per_team['private_auc'] = '---'
+            
+            display_cols = ["rank", "team", "public_auc", "private_auc", "logloss", "timestamp"]
+            display_cols = [c for c in display_cols if c in best_per_team.columns]
+            
+            st.dataframe(best_per_team[display_cols], use_container_width=True, height=400)
+        else:
+            st.write("Aucune soumission.")
+    
+    with tab2:
         if lb.empty:
             st.write("Aucune soumission pour le moment.")
         else:
@@ -467,31 +492,6 @@ with colR:
 
             csv = show.to_csv(index=False).encode("utf-8")
             st.download_button("⬇️ Télécharger (CSV)", csv, file_name="leaderboard.csv", mime="text/csv")
-    
-    with tab2:
-        if not lb.empty:
-            # Best submission per team
-            best_per_team = lb.sort_values(['team', 'public_auc'], ascending=[True, False])
-            best_per_team = best_per_team.groupby('team').first().reset_index()
-            
-            # Re-sort by score
-            if reveal_private and 'private_auc' in best_per_team.columns and best_per_team['private_auc'].notna().any():
-                best_per_team = best_per_team.sort_values('private_auc', ascending=False)
-            else:
-                best_per_team = best_per_team.sort_values('public_auc', ascending=False)
-            
-            best_per_team['rank'] = range(1, len(best_per_team) + 1)
-            best_per_team['timestamp'] = pd.to_datetime(best_per_team['timestamp']).dt.strftime('%Y-%m-%d %H:%M')
-            
-            if not reveal_private and 'private_auc' in best_per_team.columns:
-                best_per_team['private_auc'] = '---'
-            
-            display_cols = ["rank", "team", "public_auc", "private_auc", "logloss", "timestamp"]
-            display_cols = [c for c in display_cols if c in best_per_team.columns]
-            
-            st.dataframe(best_per_team[display_cols], use_container_width=True, height=400)
-        else:
-            st.write("Aucune soumission.")
     
     with tab3:
         if not lb.empty:
