@@ -135,10 +135,9 @@ Your leaderboard will be live within seconds. 🎉
 ## 🧑‍💻 Author
 
 **Rodéo Oswald Y. TOHA**  
-Machine Learning Researcher | Data Scientist | Educator
+Computer Vision Researcher | Data Scientist | Educator
 
-> I’m passionate about bridging theory and practice — creating educational tools that make complex AI concepts tangible and engaging for learners.
-
+> I’m passionate about going beyond formulas and building unforgettable intuition.
 ---
 
 ## 📚 For PhD Reviewers
@@ -150,7 +149,7 @@ This repository demonstrates:
 * Deployment of an **interactive ML system**
 * Practical integration of **pedagogical design** with applied machine learning
 
-If you’d like to discuss research directions in **self-supervised learning**, **explainability**, or **human-centered AI**, feel free to reach out.
+If you’d like to discuss research directions in **3D Computer Vision**, **Generative Modeling**, or **Probabilistic perspective of Machine Learning**, feel free to reach out.
 
 📩 [rodeooswald@gmail.com](mailto:rodeooswald@gmail.com)  
 🔗 [LinkedIn](https://www.linkedin.com/in/rodeooswald/) • [GitHub](https://github.com/Roda10)
