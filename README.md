@@ -152,5 +152,5 @@ This repository demonstrates:
 
 If you’d like to discuss research directions in **self-supervised learning**, **explainability**, or **human-centered AI**, feel free to reach out.
 
-📩 [rodeo.toha@gmail.com](mailto:rodeo.toha@gmail.com)  
-🔗 [LinkedIn](https://www.linkedin.com/in/rodeo-toha/) • [GitHub](https://github.com/Roda10)
+📩 [rodeooswald@gmail.com](mailto:rodeooswald@gmail.com)  
+🔗 [LinkedIn](https://www.linkedin.com/in/rodeooswald/) • [GitHub](https://github.com/Roda10)
