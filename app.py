@@ -31,7 +31,7 @@ COMPETITION_NAME = "Mini-Compétition – Adult Income (ROC AUC / Log Loss)"
 
 # Competition dates (optional - comment out to disable)
 COMPETITION_START = datetime.strptime(os.getenv("COMP_START", "2025-01-01"), "%Y-%m-%d")
-COMPETITION_END = datetime.strptime(os.getenv("COMP_END", "2025-12-31"), "%Y-%m-%d")
+COMPETITION_END = datetime.strptime(os.getenv("COMP_END", "2025-11-18"), "%Y-%m-%d")
 
 # Thread safety for SQLite
 db_lock = Lock()
@@ -171,6 +171,7 @@ def check_competition_status():
 # =============================================================================
 # LOAD HIDDEN FILES (default)
 # =============================================================================
+
 ground_df = None
 public_ids = None
 
