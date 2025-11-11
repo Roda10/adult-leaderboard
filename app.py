@@ -5,6 +5,7 @@ import sqlite3
 from datetime import datetime
 from pathlib import Path
 from threading import Lock
+import unicodedata
 
 import numpy as np
 import pandas as pd
@@ -35,6 +36,13 @@ COMPETITION_END = datetime.strptime(os.getenv("COMP_END", "2025-11-19"), "%Y-%m-
 
 # Thread safety for SQLite
 db_lock = Lock()
+
+def normalize_team_name(name: str) -> str:
+    # Lowercase and remove accents
+    name = name.lower()
+    name = unicodedata.normalize('NFKD', name)
+    name = ''.join([c for c in name if not unicodedata.combining(c)])
+    return name.strip()
 
 # =============================================================================
 # UTILS
@@ -132,6 +140,8 @@ def get_conn():
     return conn
 
 def insert_submission(conn, row: dict):
+    # Normalize team name before storing
+    row['team'] = normalize_team_name(row['team'])
     with db_lock:
         conn.execute("""
             INSERT INTO submissions(team, filename, timestamp, public_auc, private_auc, overall_auc, logloss, n_overall, n_public, n_private)
@@ -141,6 +151,7 @@ def insert_submission(conn, row: dict):
 
 def count_team_submissions_today(team: str) -> int:
     conn = get_conn()
+    team = normalize_team_name(team)
     with db_lock:
         df = pd.read_sql_query(
             "SELECT COUNT(*) AS n FROM submissions WHERE LOWER(team)=LOWER(?) AND DATE(timestamp)=DATE('now')",
@@ -149,6 +160,7 @@ def count_team_submissions_today(team: str) -> int:
     return int(df["n"].iloc[0])
 
 def archive_submission(team: str, uploaded_file) -> Path:
+    team = normalize_team_name(team)
     safe_team = "".join([c for c in team if c.isalnum() or c in (" ", "_", "-", ".")]).strip().replace(" ", "_")
     team_dir = SUBMISSIONS_DIR / safe_team
     team_dir.mkdir(parents=True, exist_ok=True)
@@ -444,6 +456,8 @@ with colR:
     
     with tab1:
         if not lb.empty:
+            # Normalize team names for grouping
+            lb['team'] = lb['team'].apply(normalize_team_name)
             # Best submission per team
             best_per_team = lb.sort_values(['team', 'public_auc'], ascending=[True, False])
             best_per_team = best_per_team.groupby('team').first().reset_index()
@@ -472,6 +486,7 @@ with colR:
             st.write("Aucune soumission pour le moment.")
         else:
             show = lb.copy()
+            show['team'] = show['team'].apply(normalize_team_name)
             show = show.drop(columns=["sid"])
             
             # Format timestamp
