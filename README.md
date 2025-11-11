@@ -1,61 +1,156 @@
-# Adult Income Competition Leaderboard
+# 🏆 Mini-Kaggle: Adult Income Leaderboard
 
-A mini Kaggle-style competition platform for predicting adult income using Streamlit.
+A **Streamlit web app** for a *mini-competition* based on the [Adult Income dataset (UCI / OpenML)](https://www.openml.org/d/1590).
+Students build machine-learning models to predict whether an individual earns **more than $50K per year**, submit their results, and get instant feedback through a **live leaderboard**.
 
-## Features
-- Submit predictions via CSV uploads
-- Leaderboard with live rankings
-- ROC AUC and Log Loss scoring
-- Admin controls for competition management
+---
 
-## Local Development
+## 🎯 Objective
 
-### Prerequisites
-- Python 3.8+
-- pip or conda
+The project simulates a small-scale Kaggle competition for educational use.
+Participants:
 
-### Installation
+* Train models on `train.csv`
+* Generate probability predictions for `test.csv`
+* Upload `submission.csv` (`id,income_prob`) and see their scores ranked by **ROC-AUC** (and Log Loss as tiebreaker)
 
-1. Clone the repository:
+---
+
+## ⚙️ Features
+
+| Feature                   | Description                                                                |
+| ------------------------- | -------------------------------------------------------------------------- |
+| **Streamlit Leaderboard** | Automatic scoring (ROC-AUC / Log-Loss) with upload form                    |
+| **Admin Mode**            | Secure upload of ground truth (`ground.csv`) and optional `public_ids.csv` |
+| **Minimal UI**            | Clean leaderboard: Rank • Team • Public AUC • Private AUC • Overall AUC    |
+| **Archiving**             | All submissions are automatically stored with timestamps                   |
+| **SQLite persistence**    | Scores saved locally between restarts                                      |
+| **Public/Private split**  | Optional public leaderboard vs hidden final scores                         |
+
+---
+
+## 🧠 Educational Context
+
+This project was designed as part of an **advanced machine-learning practical**.
+It allows students to:
+
+* Experiment with various classifiers (Decision Trees, Random Forest, AdaBoost, Gradient Boosting, SVM, etc.)
+* Learn model evaluation (AUC, Log-Loss)
+* Understand fair validation and leaderboard protocols
+* Experience the workflow of real Kaggle competitions in a controlled environment
+
+---
+
+## 🚀 Quick Start (Local)
+
 ```bash
-git clone https://github.com/Roda10/adult-leaderboard.git
+# Clone the repo
+git clone https://github.com/<your-username>/adult-leaderboard.git
 cd adult-leaderboard
-```
 
-2. Install dependencies:
-```bash
+# Install dependencies
 pip install -r requirements.txt
-```
 
-3. Set up environment variables (optional):
-```bash
-export LEADERBOARD_ADMIN="your_admin_password"
-export LEADERBOARD_DB="leaderboard.db"
-export GROUND_CSV="ground.csv"
-export PUBLIC_IDS_CSV="public_ids.csv"
-export SUBMISSIONS_DIR="submissions"
-export MAX_SUBS_PER_DAY="5"
-export MAX_FILE_SIZE_MB="10"
-```
-
-4. Run the Streamlit app:
-```bash
+# Run the app
 streamlit run app.py
 ```
 
-## Deployment to Streamlit Cloud
+### Default structure
 
-1. Push this repository to GitHub
-2. Go to [share.streamlit.io](https://share.streamlit.io)
-3. Click "Deploy an app"
-4. Select your GitHub repository
-5. Select the branch and file path (`project_2/app.py`)
-6. Configure secrets in Streamlit Cloud settings if needed
-7. Click "Deploy"
+```
+adult-leaderboard/
+├── app.py                 # Streamlit leaderboard
+├── prepare_adult_competition.py  # Script to generate data splits
+├── requirements.txt
+├── runtime.txt
+└── README.md
+```
 
-## Project Structure
-- `app.py` - Main Streamlit application
-- `requirements.txt` - Python dependencies
-- `ground.csv` - Ground truth labels for validation
-- `public_ids.csv` - Public test set IDs
-- `submissions/` - Directory for team submissions
+---
+
+## 🔐 Admin Setup
+
+1. Set an environment variable for the admin password:
+
+   ```bash
+   export LEADERBOARD_ADMIN="your_password_here"
+   ```
+2. Run the app and open it in the browser.
+3. In the sidebar → check **Mode administrateur** → enter the password.
+4. Upload your private files:
+
+   * `ground.csv` → contains `id,income` (hidden truth)
+   * (optional) `public_ids.csv` → contains only `id` for public leaderboard split.
+
+---
+
+## 📊 Expected File Formats
+
+| File             | Purpose                   | Columns                 |
+| ---------------- | ------------------------- | ----------------------- |
+| `train.csv`      | Training set              | All features + `income` |
+| `test.csv`       | Test set (no label)       | All features + `id`     |
+| `submission.csv` | Student submission        | `id,income_prob`        |
+| `ground.csv`     | Hidden truth (admin only) | `id,income`             |
+| `public_ids.csv` | Optional                  | `id`                    |
+
+---
+
+## 🧩 Dataset Preparation
+
+To generate the dataset splits locally:
+
+```bash
+python prepare_adult_competition.py --test_size 0.2 --seed 42 --make_public_ids --public_frac 0.5
+```
+
+This creates:
+
+* `train.csv`
+* `test.csv`
+* `ground.csv`
+* `sample_submission.csv`
+* `public_ids.csv` (optional)
+
+---
+
+## 🌐 Deployment (Streamlit Community Cloud)
+
+1. Push this repository to GitHub.
+2. Go to [share.streamlit.io](https://share.streamlit.io) → **New App** → choose:
+
+   * Repo: `<your-username>/adult-leaderboard`
+   * Branch: `main`
+   * File: `app.py`
+3. In **Settings → Secrets**, add:
+
+   ```toml
+   LEADERBOARD_ADMIN="your_super_secret_password"
+   ```
+
+Your leaderboard will be live within seconds. 🎉
+
+---
+
+## 🧑‍💻 Author
+
+**Rodéo Oswald Y. TOHA**  
+Machine Learning Researcher | Data Scientist | Educator
+
+> I’m passionate about bridging theory and practice — creating educational tools that make complex AI concepts tangible and engaging for learners.
+
+---
+
+## 📚 For PhD Reviewers
+
+This repository demonstrates:
+
+* Strong understanding of **model evaluation** and **MLOps for education**
+* Clean, reproducible **Python software engineering**
+* Deployment of an **interactive ML system**
+* Practical integration of **pedagogical design** with applied machine learning
+
+If you’d like to discuss research directions in **self-supervised learning**, **explainability**, or **human-centered AI**, feel free to reach out.
+
+📩 [rodeo.toha@gmail.com](mailto:rodeo.toha@gmail.com)  
+🔗 [LinkedIn](https://www.linkedin.com/in/rodeo-toha/) • [GitHub](https://github.com/Roda10)
