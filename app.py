@@ -32,7 +32,7 @@ COMPETITION_NAME = "Mini-Compétition – Adult Income (ROC AUC / Log Loss)"
 
 # Competition dates (optional - comment out to disable)
 COMPETITION_START = datetime.strptime(os.getenv("COMP_START", "2025-01-01"), "%Y-%m-%d")
-COMPETITION_END = datetime.strptime(os.getenv("COMP_END", "2025-11-19"), "%Y-%m-%d")
+COMPETITION_END = datetime.strptime(os.getenv("COMP_END", "2025-11-22"), "%Y-%m-%d")
 
 # Thread safety for SQLite
 db_lock = Lock()
