@@ -140,15 +140,6 @@ Computer Vision Researcher | Data Scientist | Educator
 > I’m passionate about going beyond formulas and building unforgettable intuition.
 ---
 
-## 📚 For PhD Reviewers
-
-This repository demonstrates:
-
-* Strong understanding of **model evaluation** and **MLOps for education**
-* Clean, reproducible **Python software engineering**
-* Deployment of an **interactive ML system**
-* Practical integration of **pedagogical design** with applied machine learning
-
 If you’d like to discuss research directions in **3D Computer Vision**, **Generative Modeling**, or **Probabilistic perspective of Machine Learning**, feel free to reach out.
 
 📩 [rodeooswald@gmail.com](mailto:rodeooswald@gmail.com)  
